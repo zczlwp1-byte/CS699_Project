@@ -1,0 +1,2 @@
+1. which decision tree was used in the best prediction (understampling +decision tree)
+2. Clip continuous outliers (1%/99%) what does it means

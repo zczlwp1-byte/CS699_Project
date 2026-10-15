@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q&amp;A Preparation — CS699 Classification Project</title>
+<style>
+  :root {
+    --navy: #1E2761;
+    --blue: #408EC6;
+    --accent: #E85D04;
+    --light: #F2F4F8;
+    --text: #333333;
+    --muted: #777777;
+    --border: #E0E4EB;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Calibri", "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+    background: #FAFBFD;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+    line-height: 1.6;
+  }
+  header {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 18px;
+    margin-bottom: 30px;
+  }
+  h1 {
+    font-family: "Georgia", serif;
+    color: var(--navy);
+    font-size: 30px;
+    margin: 0 0 8px;
+  }
+  header .meta {
+    color: var(--muted);
+    font-size: 14px;
+    font-style: italic;
+  }
+  h2 {
+    font-family: "Georgia", serif;
+    color: var(--navy);
+    font-size: 20px;
+    margin: 40px 0 6px;
+    padding: 10px 16px;
+    background: var(--light);
+    border-left: 5px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+  }
+  h3 {
+    color: var(--blue);
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 24px 0 8px;
+  }
+  .anticipated {
+    background: #FFF8F0;
+    border-left: 4px solid var(--accent);
+    padding: 12px 18px;
+    margin: 10px 0 18px;
+    font-style: italic;
+    color: #5a3500;
+    border-radius: 0 4px 4px 0;
+  }
+  .anticipated::before {
+    content: "\201C";
+    font-size: 24px;
+    color: var(--accent);
+    vertical-align: -4px;
+    margin-right: 4px;
+  }
+  .anticipated::after {
+    content: "\201D";
+    font-size: 24px;
+    color: var(--accent);
+    vertical-align: -10px;
+    margin-left: 2px;
+  }
+  .answer {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 10px 0 18px;
+    box-shadow: 0 2px 6px rgba(30, 39, 97, 0.06);
+  }
+  .answer p { margin: 0 0 12px; }
+  .answer p:last-child { margin-bottom: 0; }
+  .fallback {
+    background: var(--navy);
+    color: #FFFFFF;
+    padding: 12px 18px;
+    border-radius: 6px;
+    margin: 10px 0 24px;
+    font-size: 14px;
+  }
+  .fallback .label {
+    color: var(--accent);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  strong { color: var(--navy); }
+  em { color: var(--text); }
+  hr {
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 36px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  th {
+    background: var(--navy);
+    color: #FFFFFF;
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: bold;
+  }
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  tr:nth-child(even) td { background: var(--light); }
+  ol { padding-left: 22px; }
+  ol li { margin-bottom: 8px; }
+  .q-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 2px 10px;
+    border-radius: 3px;
+    font-size: 14px;
+    margin-right: 8px;
+    vertical-align: 2px;
+  }
+  footer {
+    margin-top: 50px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Q&amp;A Preparation — CS699 Classification Project</h1>
+  <div class="meta">
+    Team: Ho Man Cheng &amp; Weitao Peng &nbsp;|&nbsp; Format: 6 anticipated questions with rehearsed answers (~30–45 seconds each)
+  </div>
+</header>
+
+<!-- ============================================================
+     QUESTION 1
+============================================================ -->
+<h2><span class="q-num">Q1</span>Why did a simple Decision Tree beat ensembles like XGBoost and Random Forest?</h2>
+
+<h3>Anticipated phrasing from audience</h3>
+<div class="anticipated">
+  XGBoost and Random Forest had the highest AUC, but they didn't win. Why did a single Decision Tree outperform them on your target metrics?
+</div>
+
+<h3>Answer (~40 seconds)</h3>
+<div class="answer">
+  <p>Great question. The key is that <strong>AUC and per-class TPR measure different things</strong>. AUC measures how well a model <em>ranks</em> Yes examples above No examples across all possible thresholds, while Yes TPR at a fixed threshold of 0.5 measures how many Yes cases we actually classify correctly <em>right now</em>.</p>
+  <p>Random Forest and XGBoost produced strong probability rankings — that's why their AUCs were high — but their probability distributions were compressed around 0.5, so at our fixed cutoff many true Yes cases fell just below the threshold. The Decision Tree, trained on the undersampled 50/50 data, produced more confident, polarized probabilities that pushed Yes cases clearly across the 0.5 line. In other words, <strong>the ensembles ranked better, but the tree made cleaner decisions at our chosen threshold</strong> — which is exactly what the grading rubric rewards.</p>
+</div>
+
+<div class="fallback">
+  <span class="label">Fallback one-liner if short on time</span>
+  "High AUC means good ranking; the rubric rewards good <em>decisions</em> at threshold 0.5, and the Decision Tree made cleaner decisions on the undersampled data."
+</div>
+
+<hr>
+
+<!-- ============================================================
+     QUESTION 2
+============================================================ -->
+<h2><span class="q-num">Q2</span>Why did you choose Random Undersampling when it throws away ~70% of the majority class data?</h2>
+
+<h3>Anticipated phrasing from audience</h3>
+<div class="anticipated">
+  Undersampling discards most of your No-class examples. Wasn't that wasteful? Why not use SMOTE or oversampling, which keep all the data?
+</div>
+
+<h3>Answer (~40 seconds)</h3>
+<div class="answer">
+  <p>That's a fair concern, and we asked the same thing early on. Three reasons justified the choice empirically.</p>
+  <p><strong>First</strong>, the minority class is the <strong>signal-limited</strong> class here — there are only about 2,900 Yes rows. Our bottleneck was minority-class recall, not majority-class coverage, so losing some No rows wasn't the limiting factor.</p>
+  <p><strong>Second</strong>, we tested all four balancing methods head-to-head. Undersampling produced a <strong>mean Yes-TPR roughly double that of ROSE</strong>, and it consistently beat SMOTE and oversampling on the dual-threshold target. The empirical result spoke for itself.</p>
+  <p><strong>Third</strong>, the Decision Tree's top splits latched onto <strong>binary disability indicator features</strong> — variables like HHSEE, HHMEMRY, and HHCARE. Once the training data was 50/50 balanced, those binary splits aligned almost perfectly with the class boundary. Synthesized samples from SMOTE and ROSE actually <em>blurred</em> those clean binary splits by creating non-binary interpolated values.</p>
+  <p>So yes, undersampling discards data — but it discards <em>redundant</em> data and preserves the exact signal the model needs.</p>
+</div>
+
+<div class="fallback">
+  <span class="label">Fallback one-liner if short on time</span>
+  "Empirically it beat every other balancer on Yes-TPR, and it preserved the clean binary splits the Decision Tree relies on."
+</div>
+
+<hr>
+
+<!-- ============================================================
+     QUESTION 3
+============================================================ -->
+<h2><span class="q-num">Q3</span>How would your model generalize to other Census years or states, and could it be deployed in practice?</h2>
+
+<h3>Anticipated phrasing from audience</h3>
+<div class="anticipated">
+  You evaluated on a holdout from 2023 data. Would this model work on the 2021 AHS or on data from a single state? And what would it take to deploy it?
+</div>
+
+<h3>Answer (~45 seconds)</h3>
+<div class="answer">
+  <p>Honest answer: <strong>we don't know for certain</strong>, and that's an important caveat we'd flag in any real deployment. Here's what we can say.</p>
+  <p><strong>On temporal generalization:</strong> the AHS schema is relatively stable across years, and our top predictors — HHSEE, HHMEMRY, HHCARE, HHERRND — are questionnaire items that exist in multiple survey years. So the model architecture should transfer, but we'd want to <strong>retrain</strong> rather than reuse the fitted weights, because base rates shift slightly year over year.</p>
+  <p><strong>On geographic generalization:</strong> the 2023 AHS samples nationally, so our model reflects a nationally-weighted distribution. A single state with very different demographics — say, a state with a much older population — would likely see <strong>different calibration</strong>, and we'd recommend refitting on state-level data if such data were available.</p>
+  <p><strong>On deployment:</strong> honestly, a Yes-class precision of <strong>0.47</strong> is too low for any high-stakes decision like benefit allocation. Our model is more useful as a <strong>screening tool</strong> — flagging households for a human follow-up — than as an automated classifier. With a higher-precision stage after it, it could add real value.</p>
+</div>
+
+<div class="fallback">
+  <span class="label">Fallback one-liner if short on time</span>
+  "The features are stable across AHS years, so the architecture generalizes — but we'd retrain on new data, and the ~47% precision means it's a screening tool, not a deployment-ready classifier."
+</div>
+
+<hr>
+
+<!-- ============================================================
+     QUESTION 4
+============================================================ -->
+<h2><span class="q-num">Q4</span>Why did you fix the classification threshold at 0.5 instead of tuning it per model?</h2>
+
+<h3>Anticipated phrasing from audience</h3>
+<div class="anticipated">
+  You could have boosted Yes TPR for XGBoost and Random Forest just by lowering the threshold below 0.5. Why didn't you tune the threshold per model?
+</div>
+
+<h3>Answer (~40 seconds)</h3>
+<div class="answer">
+  <p>You're right that threshold tuning would change the ranking — and that was actually a deliberate methodological choice, not an oversight.</p>
+  <p><strong>First</strong>, a fixed threshold of 0.5 gives us a <strong>fair, apples-to-apples comparison</strong> across all 36 models. If we tuned per model, we'd be comparing 36 different operating points, and the winner would partly reflect who got the luckiest threshold on the test set — not who had the strongest underlying classifier.</p>
+  <p><strong>Second</strong>, threshold tuning on the test set is a form of <strong>data leakage</strong>. Doing it properly would require a separate validation split or nested cross-validation, which would shrink our training data further.</p>
+  <p><strong>Third</strong>, the assignment's grading rubric specifies evaluation at the default threshold, so we followed the stated protocol.</p>
+  <p>That said, if this were a real deployment, threshold tuning via precision-recall curves would be the next step — and I'd expect XGBoost to become competitive once we pick a threshold around 0.3 to 0.35.</p>
+</div>
+
+<div class="fallback">
+  <span class="label">Fallback one-liner if short on time</span>
+  "Fixed threshold = fair comparison across 36 models with no test-set leakage; threshold tuning would be the next step in a real deployment."
+</div>
+
+<hr>
+
+<!-- ============================================================
+     QUESTION 5
+============================================================ -->
+<h2><span class="q-num">Q5</span>What are the ethical and privacy implications of predicting disability status?</h2>
+
+<h3>Anticipated phrasing from audience</h3>
+<div class="anticipated">
+  Predicting disability status is sensitive. What are the ethical risks of this kind of model, and how should stakeholders think about deploying it?
+</div>
+
+<h3>Answer (~45 seconds)</h3>
+<div class="answer">
+  <p>This is a question we take seriously, and it's one of the reasons we were cautious about the deployment claim.</p>
+  <p><strong>The first risk is misuse.</strong> A model that flags households as likely containing a disabled person could be used for <em>discrimination</em> as easily as for support — for example by insurers adjusting premiums, landlords screening tenants, or employers targeting job ads. So any deployment would need strict access controls and a defined legitimate purpose, like allocating accessibility resources.</p>
+  <p><strong>The second risk is false positives.</strong> Our Yes-class precision is only <strong>0.47</strong>, meaning over half of flagged households don't actually have a disabled member. Labeling a household incorrectly based on a model could cause real harm if the label is treated as authoritative.</p>
+  <p><strong>The third risk is privacy.</strong> The AHS is a public survey with informed consent, but deploying a predictor on non-survey data — say, administrative records — crosses a consent boundary the original respondents didn't agree to.</p>
+  <p>Our view: this model belongs in <strong>aggregate policy research</strong>, not individual-level decisioning.</p>
+</div>
+
+<div class="fallback">
+  <span class="label">Fallback one-liner if short on time</span>
+  "Three concerns — discrimination risk, 47% false-positive rate, and consent boundaries. This model belongs in aggregate research, not individual decisions."
+</div>
+
+<hr>
+
+<!-- ============================================================
+     QUESTION 6
+============================================================ -->
+<h2><span class="q-num">Q6</span>What would you do differently if you had more time or compute resources?</h2>
+
+<h3>Anticipated phrasing from audience</h3>
+<div class="anticipated">
+  If you had another semester and unlimited compute, what's the next thing you'd try to push performance higher?
+</div>
+
+<h3>Answer (~45 seconds)</h3>
+<div class="answer">
+  <p>Great closing question. Four things, roughly in order of expected impact.</p>
+  <p><strong>First, cost-sensitive learning.</strong> Instead of physically resampling the training data, we'd encode the class imbalance into the loss function directly — for example, class-weighted XGBoost. This often matches undersampling's recall while keeping all the training data.</p>
+  <p><strong>Second, proper threshold tuning</strong> with a three-way split — train, validation, test — to pick a per-model threshold that maximizes the dual-TPR objective without leaking.</p>
+  <p><strong>Third, model stacking.</strong> Our results suggest Decision Trees handle Yes-TPR well while XGBoost handles No-TPR and AUC well. A meta-learner that blends them could potentially cross both thresholds with higher margin.</p>
+  <p><strong>Fourth, feature engineering from the AHS codebook</strong> — building composite features from related survey items rather than using raw codes. The raw AHS features are noisy; domain-informed aggregations would likely help every algorithm.</p>
+  <p>If I had to pick just one, I'd start with <strong>cost-sensitive XGBoost</strong> — it's the highest expected return for the lowest implementation cost.</p>
+</div>
+
+<div class="fallback">
+  <span class="label">Fallback one-liner if short on time</span>
+  "Cost-sensitive XGBoost first, then proper threshold tuning with a three-way split, then stacking Decision Tree + XGBoost into a meta-learner."
+</div>
+
+<hr>
+
+<!-- ============================================================
+     DELIVERY TIPS
+============================================================ -->
+<h2>Delivery Tips</h2>
+<ol>
+  <li><strong>Acknowledge the question first</strong> — a brief "Great question" or "That's a fair concern" buys you two seconds to organize your thought.</li>
+  <li><strong>Number your points out loud</strong> ("Three reasons...", "First... Second... Third...") — the audience remembers structured answers better.</li>
+  <li><strong>Admit uncertainty when appropriate</strong> — saying "honestly, we don't know" about generalization is more credible than overclaiming.</li>
+  <li><strong>Cap each answer at ~45 seconds</strong> — if you're running long, stop and offer to discuss offline.</li>
+  <li><strong>Split Q&amp;A handling</strong> — Ho Man fields Preprocessing/Data questions; Weitao fields Results/Evaluation questions. If one of you is stuck, the other steps in.</li>
+</ol>
+
+<!-- ============================================================
+     CHEAT SHEET
+============================================================ -->
+<h2>Quick-Reference Cheat Sheet</h2>
+<p style="color: var(--muted); font-size: 13px; font-style: italic;">Keep these numbers on the lectern — interviewers love specific stats.</p>
+<table>
+  <thead>
+    <tr><th>Stat</th><th>Value</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Training rows</td><td>9,636</td></tr>
+    <tr><td>Test rows</td><td>2,409</td></tr>
+    <tr><td>Features after preprocessing</td><td>118</td></tr>
+    <tr><td>Class distribution</td><td>30.4% Yes / 69.6% No</td></tr>
+    <tr><td>Best model — Yes TPR</td><td>0.7730</td></tr>
+    <tr><td>Best model — No TPR</td><td>0.7322</td></tr>
+    <tr><td>Best model — AUC</td><td>0.7990</td></tr>
+    <tr><td>Best model — F1 (Yes)</td><td>0.6140</td></tr>
+    <tr><td>Best model — Kappa</td><td>0.4582</td></tr>
+    <tr><td>Extra-credit thresholds</td><td>Yes &#8805; 0.77, No &#8805; 0.73</td></tr>
+  </tbody>
+</table>
+
+<footer>
+  CS699 Data Mining &nbsp;·&nbsp; Spring 2026 &nbsp;·&nbsp; Boston University Metropolitan College
+</footer>
+
+</body>
+</html>

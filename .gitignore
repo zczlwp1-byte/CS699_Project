@@ -1,0 +1,14 @@
+node_modules/
+.claude/
+.git/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+.DS_Store
+Thumbs.db
